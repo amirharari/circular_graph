@@ -50,3 +50,18 @@ While we'll leave it for you to decide how to create this platform, here are som
 
 
 (P.S, I've added a MATLAB code the some of Yaniv's lab members use for such visualizations, feel free to draw some inspiration from it)
+
+P.S #2:
+
+Since circular graphs are so beautiful, we won't be the first to try implementing them as a python package,
+which means that you can draw even more inspiration from other open-source packages such as:
+
+- `mne`_
+- `networkx`_
+- `nxviz`_
+
+And many more... (I'll leave some exlorations for you to do)
+
+.. _mne: https://mne.tools/stable/generated/mne.viz.circular_layout.html
+.. _networkx: https://networkx.org/documentation/stable/reference/generated/networkx.drawing.layout.circular_layout.html
+.. _nxviz: https://nxviz.readthedocs.io/en/latest/usage.html#circos-plots
