@@ -39,7 +39,7 @@ def load_data(connectivity_matrix_path, atlas_path, grouping_name, label, roi_na
 
     # validate inputs
     n_rows, n_cols = connectivity_matrix.shape
-    num_rois = np.max(atlas["Label"])
+    num_rois = np.max(atlas[label])
     if n_rows != n_cols:
         raise ValueError("The number of rows and the number of columns must be same!\nNumber of rows is {n_rows}\nNUmber of columns is {n_cols}".format(n_rows = n_rows, n_cols = n_cols))
 
