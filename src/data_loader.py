@@ -24,7 +24,7 @@ def load_data(connectivity_matrix_path, atlas_path, grouping_name, label, roi_na
     Returns
     -------
     connectivity_matrix: np.ndarray
-        Normalized n X n matrix where n is the number of ROIs in  the atlas. 
+        n X n matrix where n is the number of ROIs in  the atlas. 
         Each cell in the matrix describes the connection between each pair of ROIs.
     groups: dictionary
         Dictionary of groups of ROIs, divided by the grouping variable.
@@ -61,8 +61,6 @@ def load_data(connectivity_matrix_path, atlas_path, grouping_name, label, roi_na
     for group in groups_names:
         group_df = grouped_atlas.get_group(group)
         groups[group] = list(zip(group_df[label] - 1, group_df[roi_names]))
-
-    # normalization of connectivity matrix
-    normalized_connectivity_matrix = (connectivity_matrix - np.min(connectivity_matrix)) / (np.max(connectivity_matrix) - np.min(connectivity_matrix))
-    return normalized_connectivity_matrix, groups
+   
+    return connectivity_matrix, groups
     
