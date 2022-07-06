@@ -4,6 +4,9 @@ import numpy as np
 
 def load_data(connectivity_matrix_path, atlas_path, grouping_name, label, roi_names):
     """
+    This function loads and returns a connectivity matrix from a .csv file. 
+    In addition, it groups the ROIs according to a grouping variable (such as lobes or networks) provided by the atlas.
+
     Parameters 
     ----------
     connectivity_matrix: string
