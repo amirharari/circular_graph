@@ -89,22 +89,30 @@ def load_data(
             )
         )
 
-    grouped_atlas_hemisphere = atlas.replace({hemisphere: {np.nan: "missing"}}).groupby(
-        hemisphere
+    # grouping
+    sorted_hemisperes = atlas.apply(
+        lambda row: "else"
+        if row[hemisphere] != "L" and row[hemisphere] != "R"
+        else row[hemisphere],
+        axis=1,
     )
+    atlas_by_hemispheres = atlas
+    atlas_by_hemispheres[hemisphere] = sorted_hemisperes
+
+    grouped_atlas_hemisphere = atlas.groupby(hemisphere)
     hemisperic_names = list(grouped_atlas_hemisphere.groups.keys())
     L_group = grouped_atlas_hemisphere.get_group(left_symbol)
     R_group = grouped_atlas_hemisphere.get_group(right_symbol)
-    other_group = grouped_atlas_hemisphere.get_group(hemisperic_names[2])
+    else_group = grouped_atlas_hemisphere.get_group("else")
 
     return connectivity_matrix, [
-        create_dictionary(L_group),
-        create_dictionary(R_group),
-        create_dictionary(other_group),
+        create_dictionary(L_group, grouping_name, label, roi_names),
+        create_dictionary(R_group, grouping_name, label, roi_names),
+        create_dictionary(else_group, grouping_name, label, roi_names),
     ]
 
 
-def create_dictionary(grouped_by_hemisphere, grouping_name=grouping_name):
+def create_dictionary(grouped_by_hemisphere, grouping_name, label, roi_names):
     """
     This function groups the ROIs according to a grouping variable within hemisphere.
 
