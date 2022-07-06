@@ -1,3 +1,6 @@
+load CM
+CM(CM>100)=100;
+
 %% assign segments
 cm1=brewermap(85,'*Reds');
 cm2=brewermap(70,'*Blues');
@@ -19,10 +22,11 @@ cmap=ocmap(locs,:);
 save xcmap cmap;
 % PL2=zeros(274,274);
 % PL2(1:246,1:246)=PL.*30;
-conmat2=np(locs,locs);
+conmat2=CM(locs,locs);
 conmat2(find(conmat2>0))=0;
 conm=abs(conmat2);
 conm(find(conm<280))=0;
+conm(isnan(conm)) = 0;
 circularGraph(conm);
 
 %% the pie
