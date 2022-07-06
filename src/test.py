@@ -1,8 +1,6 @@
-import networkx as nx
-import matplotlib.pyplot as plt
-import nxviz as nv
+from src.graph_creator import create_graph
+from src.normalize_threshold import normalize_threshold
 from src import data_loader
-import numpy as np
 
 
 connectivity_matrix, groups = data_loader.load_data(
@@ -14,6 +12,5 @@ connectivity_matrix, groups = data_loader.load_data(
 )
 
 
-G = nx.from_numpy_array(filtered_matrix, groups)
-nv.CircosPlot(G)
-plt.show()
+filtered_matrix = normalize_threshold(connectivity_matrix, threshold = 0.5)
+graph = create_graph(filtered_matrix,groups)
