@@ -130,3 +130,8 @@ dmypy.json
 
 # Vscode settings
 .vscode
+
+# Matlab example files
+brewermap.m
+xcmap.mat
+circularGraph.m
