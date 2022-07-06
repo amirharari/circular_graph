@@ -38,8 +38,8 @@ def load_data(
     connectivity_matrix: np.ndarray
         n X n matrix where n is the number of ROIs in  the atlas.
         Each cell in the matrix describes the connection between each pair of ROIs.
-    groups: dictionary
-        Dictionary of groups of ROIs, divided by the grouping variable.
+    groups: list
+        List of dictionaries for each hemisphere. Each dictionary is divided by the grouping variable.
         The keys are the groups names. The values are lists of tuples, each tuple represents a ROI in the group.
         Each tuple contains the index of a ROI in the connectivity matrix (starting from zero) and the ROI name.
         for example:  {"Frontal lobe": [(0, precentral gyrus), (1, SFG), (2, MFG), (3, IFG)}
@@ -105,6 +105,27 @@ def load_data(
 
 
 def create_dictionary(grouped_by_hemisphere, grouping_name=grouping_name):
+    """
+    This function groups the ROIs according to a grouping variable within hemisphere.
+
+    Parameters
+    ----------
+    grouped_by_hemisphere: DataFrame
+        Part of the matrix that related to specific hemisphere.
+    grouping_name: string
+        The name of variable by which we will group ROIs in the graph.
+        the name of grouping variaible must be
+
+    Returns
+    -------
+    groups: dictionary
+        Dictionary of groups of ROIs, divided by the grouping variable.
+        The keys are the groups names. The values are lists of tuples, each tuple represents a ROI in the group.
+        Each tuple contains the index of a ROI in the connectivity matrix (starting from zero) and the ROI name.
+        for example:  {"Frontal lobe": [(0, precentral gyrus), (1, SFG), (2, MFG), (3, IFG)}
+
+    """
+
     grouped_atlas = grouped_by_hemisphere.groupby([grouping_name])
     groups_names = list(grouped_atlas.groups.keys())
     groups = {}
