@@ -1,3 +1,4 @@
+import numpy as np
 def normalize_threshold(connectivity_matrix, threshold = 0.5):
     """
     This function gets a connectivity matrix and normalize its values between 0 to 1. 
