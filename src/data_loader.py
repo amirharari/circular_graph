@@ -27,10 +27,10 @@ def load_data(connectivity_matrix_path, atlas_path, grouping_name, label, roi_na
         Normalized n X n matrix where n is the number of ROIs in  the atlas. 
         Each cell in the matrix describes the connection between each pair of ROIs.
     groups: dictionary
-        dictionary that contains the groups of ROIs, divided by the grouping variable.
-        The keys are the groups names. The values are lists of tuples of the ROIs in that group.
-        Each tuple contains the label and name of a single ROI.
-        for example:  {"Frontal lobe": [(1, precentral gyrus), (2, SFG), (3, MFG), (4, IFG)}
+        Dictionary of groups of ROIs, divided by the grouping variable.
+        The keys are the groups names. The values are lists of tuples, each tuple represents a ROI in the group.
+        Each tuple contains the index of a ROI in the connectivity matrix (starting from zero) and the ROI name.
+        for example:  {"Frontal lobe": [(0, precentral gyrus), (1, SFG), (2, MFG), (3, IFG)}
 
     """
 
@@ -60,8 +60,9 @@ def load_data(connectivity_matrix_path, atlas_path, grouping_name, label, roi_na
     groups = {}
     for group in groups_names:
         group_df = grouped_atlas.get_group(group)
-        groups[group] = list(zip(group_df[label], group_df[roi_names]))
+        groups[group] = list(zip(group_df[label] - 1, group_df[roi_names]))
 
     # normalization of connectivity matrix
     normalized_connectivity_matrix = (connectivity_matrix - np.min(connectivity_matrix)) / (np.max(connectivity_matrix) - np.min(connectivity_matrix))
     return normalized_connectivity_matrix, groups
+    
