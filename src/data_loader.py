@@ -96,7 +96,6 @@ def load_data(
     L_group = grouped_atlas_hemisphere.get_group(left_symbol)
     R_group = grouped_atlas_hemisphere.get_group(right_symbol)
     other_group = grouped_atlas_hemisphere.get_group(hemisperic_names[2])
-    dict_list = (create_dictionary(L_group, grouping_name),)
 
     return connectivity_matrix, [
         create_dictionary(L_group),
