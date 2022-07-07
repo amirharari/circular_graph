@@ -13,16 +13,16 @@ class Circular_graph:
     with nodes as brain ROIs and width of edges representing the degree of connection between 2 ROIs"""
 
     def __init__(
-            self,
-            connectivity_matrix_path,
-            atlas_path,
-            grouping_name="Lobe",
-            label="Label",
-            roi_names="ROIname",
-            hemisphere="Hemi",
-            left_symbol="L",
-            right_symbol="R",
-            threshold=0.5,
+        self,
+        connectivity_matrix_path,
+        atlas_path,
+        grouping_name="Lobe",
+        label="Label",
+        roi_names="ROIname",
+        hemisphere="Hemi",
+        left_symbol="L",
+        right_symbol="R",
+        threshold=0.5,
     ) -> None:
         """
         Parameters
@@ -61,7 +61,7 @@ class Circular_graph:
         self.threshold = threshold
         self.connectivity_matrix = []
         self.groups = []
-        self.normalized_matrix = []
+        self.filtered_normalize_matrix = []
 
     def show_graph(self):
         """
@@ -73,7 +73,7 @@ class Circular_graph:
         ROIs is indicated by the the width of the edges.
         """
         self.data_loader()
-        self.normalize_threshold()
+        self.normalizing_and_thresholding()
         self.create_graph()
 
     def data_loader(self):
@@ -191,7 +191,7 @@ class Circular_graph:
             )
         return groups
 
-    def normalize_threshold(self):
+    def normalizing_and_thresholding(self):
         """
         This function gets a connectivity matrix and normalize its values between 0 to 1.
         After normalization, the function zero the matrix values that are lower than  the threshold
@@ -207,7 +207,7 @@ class Circular_graph:
 
         Returns
         -------
-        filtered_matrix: np.ndarray
+        filtered_normalize_matrix: np.ndarray
             connecitivty matrix after thresholding and normalization
         """
         if self.threshold < 0 or self.threshold > 1:
@@ -217,10 +217,10 @@ class Circular_graph:
             self.connectivity_matrix - np.min(self.connectivity_matrix)
         ) / (np.max(self.connectivity_matrix) - np.min(self.connectivity_matrix))
 
-        filtered_matrix = normalized_connectivity_matrix
-        filtered_matrix[normalized_connectivity_matrix < self.threshold] = 0
+        filtered_normalize_matrix = normalized_connectivity_matrix
+        filtered_normalize_matrix[normalized_connectivity_matrix < self.threshold] = 0
 
-        self.normalized_matrix = filtered_matrix
+        self.filtered_normalize_matrix = filtered_normalize_matrix
 
     def create_graph(self):
         def rotate_node_by_count(g, count):
@@ -242,10 +242,8 @@ class Circular_graph:
                 sort_value += 1
             return sort_value
 
-        def add_values(g, items, sort_value, rotate_nodes=False):
+        def add_values(g, items, sort_value):
             for k1, v1 in items:
-                if rotate_nodes:
-                    v1.reverse()
                 for i1 in v1:
                     g.nodes()[i1[0]]["group"] = k1
                     g.nodes()[i1[0]]["transparent"] = 1
@@ -254,10 +252,12 @@ class Circular_graph:
                 sort_value = add_padding(g, 5, sort_value)
             return sort_value
 
-        g = nx.from_numpy_array(self.normalized_matrix, self.groups).to_directed()
+        g = nx.from_numpy_array(
+            self.filtered_normalize_matrix, self.groups
+        ).to_directed()
         nx.set_edge_attributes(
             g,
-            {e: w * 4 for e, w in nx.get_edge_attributes(g, "weight").items()},
+            {e: w * 3 for e, w in nx.get_edge_attributes(g, "weight").items()},
             "doubled_weight",
         )
         left = self.groups[0]
@@ -274,7 +274,6 @@ class Circular_graph:
             g,
             collections.OrderedDict(sorted(right.items(), reverse=True)).items(),
             sort_value,
-            True
         )
 
         rotate_node_by_count(g, round(((len(g.nodes)) / 4) - padding_size / 3))
