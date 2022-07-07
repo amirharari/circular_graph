@@ -41,6 +41,14 @@ class Circular_graph:
         roi_names: string
             Name of column in the atlas that contains the ROIs names.
             These names will be presented on the circular graph
+        hemisphere: string
+            name of column indicating the hemisphere in which the ROI is.
+        left_symbol: string
+            how "left hemisphere" is indicated in the hemisphere column.
+        right_symbol: string
+            how "right hemisphere" is indicated in the hemisphere column.
+        threshold: float
+            threshold of connectivity strength over which will appear in graph.
         """
         self.connectivity_matrix_path = connectivity_matrix_path
         self.atlas_path = atlas_path
@@ -56,6 +64,14 @@ class Circular_graph:
         self.normalized_matrix = []
 
     def show_graph(self):
+        """
+        This method will call the other methods in this class
+        to produce and present the circular connectivity graph.
+        Returns
+        -------
+        Figure of circular graph with color legend according to grouping. The degree of connectivity between
+        ROIs is indicated by the the width of the edges.
+        """
         self.data_loader()
         self.normalize_threshold()
         self.create_graph()
@@ -154,7 +170,7 @@ class Circular_graph:
             Part of the atlas that relates to specific hemisphere.
         grouping_name: string
             The name of variable by which we will group ROIs in the graph.
-            he name of grouping variable must be the name of one of the columns.
+            The name of grouping variable must be the name of one of the columns.
 
         Returns
         -------
