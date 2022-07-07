@@ -4,6 +4,7 @@ import nxviz as nv
 from nxviz import annotate
 import collections
 from random import randint
+import numpy as np
 
 def rotate_graph_90_degree(g):
     values = []
@@ -58,13 +59,15 @@ def create_graph(filtered_matrix, groups):
     add_values(g,
                collections.OrderedDict(sorted(right.items(), reverse=True)).items(),
                sort_value)
-
+    edge_table = nv.utils.edge_table(g)
     rotate_graph_90_degree(g)
+    lw = np.sqrt(edge_table["edge_value"]) 
     nv.circos(g,
               node_color_by="group",
               sort_by="sort",
               edge_color_by="source_node_color",
-              node_alpha_by="transparent")
+              node_alpha_by="transparent",
+              lw=lw)
     annotate.node_colormapping(g,
                                color_by="group",
                                legend_kwargs={"loc": "lower left", "bbox_to_anchor": (0.0, 1.0)})
