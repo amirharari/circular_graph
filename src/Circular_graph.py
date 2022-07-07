@@ -269,9 +269,3 @@ class Circular_graph:
         plt.text(0.7, 0.5, "Right\nHemisphere", transform=fig.transFigure, fontsize=15)
         plt.show()
 
-
-atlas_path = "data/examples/parcellation_schemes/BNA_with_cerebellum.csv"
-conmat_path = "data/examples/connectivity_matrices/atlas-brainnetome_count-1M_scale-length_connectome.csv"
-
-bna = Circular_graph(conmat_path, atlas_path)
-bna.show_graph()
