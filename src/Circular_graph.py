@@ -51,6 +51,9 @@ class Circular_graph:
         self.left_symbol = left_symbol
         self.right_symbol = right_symbol
         self.threshold = threshold
+        self.connectivity_matrix = []
+        self.groups = []
+        self.normalized_matrix = []
 
     def show_graph(self):
         self.data_loader()
@@ -268,7 +271,8 @@ class Circular_graph:
             sort_by="sort",
             node_alpha_by="transparent",
             edge_color_by="source_node_color",
-            edge_lw_by="doubled_weight")
+            edge_lw_by="doubled_weight",
+        )
 
         annotate.node_colormapping(
             g,
