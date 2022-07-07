@@ -5,9 +5,9 @@ import numpy as np
 def load_data(
     connectivity_matrix_path,
     atlas_path,
-    grouping_name,
-    label,
-    roi_names,
+    grouping_name = "Lobe",
+    label = "Label",
+    roi_names = "ROIname",
     hemisphere="Hemi",
     left_symbol="L",
     right_symbol="R",
@@ -15,7 +15,8 @@ def load_data(
     """
     This function loads and returns a connectivity matrix from a .csv file.
     In addition, it groups the ROIs according to a grouping variable (such as lobes or networks) provided by the atlas.
-
+    Default values match the brainnetome atlas (with cerebellum)
+    
     Parameters
     ----------
     connectivity_matrix: string
