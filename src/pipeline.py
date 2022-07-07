@@ -1,14 +1,20 @@
-from src.Circular_graph import Circular_graph
-
+from circular_graph import circular_graph
+from normalizer import normalize_and_set_threshold
+from data_loader import load_data
 
 """Run as Class: Circular_graph
 Enter the connectivity map of interest.
 Enter the Brain Atlas of interest.
 """
-conmat = "BNA_with_cerebellum.csv"
-atlas = "atlas-brainnetome_count-1M_scale-length_connectome.csv"
-conmat_path = "data/examples/connectivity_matrices/{}".format(atlas)
-atlas_path = "data/examples/parcellation_schemes/{}".format(conmat)
-
-bna = Circular_graph(conmat_path, atlas_path)
+"""Run as functions"""
+connectivity_matrix, groups = \
+    load_data(
+        "../data/examples/connectivity_matrices/atlas-brainnetome_count-1M_scale-length_connectome.csv",
+        "../data/examples/parcellation_schemes/BNA_with_cerebellum.csv",
+        "Lobe",
+        "Label",
+        "ROIname",
+    )
+filter_normalized_matrix = normalize_and_set_threshold(connectivity_matrix, threshold=0.5)
+bna = circular_graph(filter_normalized_matrix, groups)
 bna.show_graph()

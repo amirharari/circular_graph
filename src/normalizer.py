@@ -1,5 +1,7 @@
 import numpy as np
-def normalize_threshold(connectivity_matrix, threshold = 0.5):
+
+
+def normalize_and_set_threshold(connectivity_matrix, threshold=0.5):
     """
     This function gets a connectivity matrix and normalize its values between 0 to 1. 
     After normalization, the function zero the matrix values that are lower than  the threshold
@@ -21,8 +23,9 @@ def normalize_threshold(connectivity_matrix, threshold = 0.5):
     if threshold < 0 or threshold > 1:
         raise ValueError("Threshold value must be between 0-1!")
 
-    normalized_connectivity_matrix = (connectivity_matrix - np.min(connectivity_matrix)) / (np.max(connectivity_matrix) - np.min(connectivity_matrix))
-    
+    normalized_connectivity_matrix = (connectivity_matrix - np.min(connectivity_matrix)) / (
+            np.max(connectivity_matrix) - np.min(connectivity_matrix))
+
     filtered_matrix = normalized_connectivity_matrix
     filtered_matrix[normalized_connectivity_matrix < threshold] = 0
 

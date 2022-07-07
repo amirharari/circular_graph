@@ -3,14 +3,14 @@ import numpy as np
 
 
 def load_data(
-    connectivity_matrix_path,
-    atlas_path,
-    grouping_name = "Lobe",
-    label = "Label",
-    roi_names = "ROIname",
-    hemisphere="Hemi",
-    left_symbol="L",
-    right_symbol="R",
+        connectivity_matrix_path,
+        atlas_path,
+        grouping_name="Lobe",
+        label="Label",
+        roi_names="ROIname",
+        hemisphere="Hemi",
+        left_symbol="L",
+        right_symbol="R",
 ):
     """
     This function loads and returns a connectivity matrix from a .csv file.
@@ -33,13 +33,18 @@ def load_data(
     roi_names: string
         Name of column in the atlas that contains the ROIs names.
         These names will be presented on the circular graph
-
+    hemisphere: string
+            name of column indicating the hemisphere in which the ROI is.
+    left_symbol: string
+            how "left hemisphere" is indicated in the hemisphere column.
+    right_symbol: string
+            how "right hemisphere" is indicated in the hemisphere column.
     Returns
     -------
     connectivity_matrix: np.ndarray
         n X n matrix where n is the number of ROIs in  the atlas.
         Each cell in the matrix describes the connection between each pair of ROIs.
-    groups: list
+    right_left_and_natural_groups: List<Dictionary<string,List<(int, string)>>
         List of dictionaries for each hemisphere. Each dictionary is divided by the grouping variable.
         The keys are the groups names. The values are lists of tuples, each tuple represents a ROI in the group.
         Each tuple contains the index of a ROI in the connectivity matrix (starting from zero) and the ROI name.
@@ -123,10 +128,15 @@ def create_dictionary(grouped_by_hemisphere, grouping_name, label, roi_names):
     grouping_name: string
         The name of variable by which we will group ROIs in the graph.
         the name of grouping variaible must be
+    label: string
+        Name of column in the atlas that contains the numbers (labels) of the ROIs
+    roi_names: string
+        Name of column in the atlas that contains the ROIs names.
+        These names will be presented on the circular graph
 
     Returns
     -------
-    groups: dictionary
+    groups: Dictionary<string,List<(int, string)>
         Dictionary of groups of ROIs, divided by the grouping variable.
         The keys are the groups names. The values are lists of tuples, each tuple represents a ROI in the group.
         Each tuple contains the index of a ROI in the connectivity matrix (starting from zero) and the ROI name.
