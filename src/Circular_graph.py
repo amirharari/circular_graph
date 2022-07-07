@@ -204,19 +204,18 @@ class Circular_graph:
         self.normalized_matrix = filtered_matrix
 
     def create_graph(self):
-        def rotate_graph_90_degree(g):
-            values = []
-            for node in g.nodes():
-                values.append(g.nodes()[node]["sort"])
+        def rotate_node_by_count(g, count):
+            values = [g.nodes()[node]["sort"] for node in g.nodes]
+            print(count)
             values.sort()
-            values = values[(-(round(len(values) / 4.6))) :]
+            values = values[-count:]
             for node in g.nodes():
                 if g.nodes()[node]["sort"] in values:
                     g.nodes()[node]["sort"] += -1000
 
         def add_padding(g, padding_size, sort_value):
             for i in range(padding_size):
-                node_value = i * randint(1, 1000000)
+                node_value = i * randint(1000, 100000000)
                 g.add_node(node_value)
                 g.nodes()[node_value]["group"] = "_"
                 g.nodes()[node_value]["transparent"] = 0
@@ -234,12 +233,18 @@ class Circular_graph:
                 sort_value = add_padding(g, 5, sort_value)
             return sort_value
 
-        g = nx.from_numpy_array(self.normalized_matrix, self.groups).to_directed()
+        g = nx.from_numpy_array(self.filtered_matrix, self.groups).to_directed()
+        nx.set_edge_attributes(
+            g,
+            {e: w * 3 for e, w in nx.get_edge_attributes(g, "weight").items()},
+            "doubled_weight",
+        )
         left = self.groups[0]
         right = self.groups[1]
         other = self.groups[2]
         sort_value = 0
-        sort_value = add_padding(g, 30, sort_value)
+        padding_size = 30
+        sort_value = add_padding(g, padding_size, sort_value)
         sort_value = add_values(
             g, collections.OrderedDict(sorted(left.items())).items(), sort_value
         )
@@ -250,22 +255,26 @@ class Circular_graph:
             sort_value,
         )
 
-        rotate_graph_90_degree(g)
+        rotate_node_by_count(g, round(((len(g.nodes)) / 4) - padding_size / 3))
+        nx.set_edge_attributes(
+            g,
+            {e: np.sqrt(w) for e, w in nx.get_edge_attributes(g, "weight").items()},
+            "sqrt_weight",
+        )
         fig, ax = plt.subplots()
         nv.circos(
             g,
             node_color_by="group",
             sort_by="sort",
             node_alpha_by="transparent",
-            edge_alpha_by="weight",
-            edge_lw_by="weight",
-        )
+            edge_color_by="source_node_color",
+            edge_lw_by="doubled_weight")
+
         annotate.node_colormapping(
             g,
             color_by="group",
             legend_kwargs={"loc": "lower left", "bbox_to_anchor": (0.0, 1.0)},
         )
-        plt.text(0.25, 0.5, "Left\nHemisphere", transform=fig.transFigure, fontsize=15)
-        plt.text(0.7, 0.5, "Right\nHemisphere", transform=fig.transFigure, fontsize=15)
+        plt.text(0.1, 0.5, "Left\nHemisphere", transform=fig.transFigure, fontsize=15)
+        plt.text(0.8, 0.5, "Right\nHemisphere", transform=fig.transFigure, fontsize=15)
         plt.show()
-
