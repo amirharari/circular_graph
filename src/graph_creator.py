@@ -5,6 +5,7 @@ from nxviz import annotate
 import collections
 from random import randint
 import numpy as np
+import pandas as pd
 
 def rotate_graph_90_degree(g):
     values = []
@@ -21,7 +22,7 @@ def add_padding(g, padding_size, sort_value):
     for i in range(padding_size):
         node_value = i * randint(1,1000000)
         g.add_node(node_value)
-        g.nodes()[node_value]["group"] = " "
+        g.nodes()[node_value]["group"] = "_"
         g.nodes()[node_value]["transparent"] = 0
         g.nodes()[node_value]["sort"] = sort_value
         sort_value += 1
@@ -59,15 +60,15 @@ def create_graph(filtered_matrix, groups):
     add_values(g,
                collections.OrderedDict(sorted(right.items(), reverse=True)).items(),
                sort_value)
-    edge_table = nv.utils.edge_table(g)
+    
     rotate_graph_90_degree(g)
-    lw = np.sqrt(edge_table["edge_value"]) 
+    nx.set_edge_attributes(g, {e:np.sqrt(w) for e, w in nx.get_edge_attributes(g, 'weight').items()}, 'sqrt_weight')
     nv.circos(g,
               node_color_by="group",
-              sort_by="sort",
-              edge_color_by="source_node_color",
-              node_alpha_by="transparent",
-              lw=lw)
+              sort_by="sort", 
+              node_alpha_by="transparent", 
+              edge_alpha_by = "sqrt_weight",
+              lw_by = "sqrt_weight")
     annotate.node_colormapping(g,
                                color_by="group",
                                legend_kwargs={"loc": "lower left", "bbox_to_anchor": (0.0, 1.0)})
