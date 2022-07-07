@@ -19,7 +19,7 @@ def load_data(
     
     Parameters
     ----------
-    connectivity_matrix: string
+    connectivity_matrix_path: string
         Path to the connectivity matrix .csv file.
         The shape of the matrix must be n X n matrix where n is the number of ROIs in  the atlas.
         Each cell in the matrix describes the connection between each pair of ROIs.
@@ -27,7 +27,7 @@ def load_data(
         Path to an atlas .csv file
     grouping_name: string
         The name of variable by which we will group ROIs in the graph.
-        the name of grouping variaible must be
+        the name of grouping variable must be the title of one of the columns.
     label: string
         Name of column in the atlas that contains the numbers (labels) of the ROIs
     roi_names: string
@@ -101,7 +101,6 @@ def load_data(
     atlas_by_hemispheres[hemisphere] = sorted_hemisperes
 
     grouped_atlas_hemisphere = atlas.groupby(hemisphere)
-    hemisperic_names = list(grouped_atlas_hemisphere.groups.keys())
     L_group = grouped_atlas_hemisphere.get_group(left_symbol)
     R_group = grouped_atlas_hemisphere.get_group(right_symbol)
     else_group = grouped_atlas_hemisphere.get_group("else")
