@@ -13,16 +13,16 @@ class Circular_graph:
     with nodes as brain ROIs and width of edges representing the degree of connection between 2 ROIs"""
 
     def __init__(
-        self,
-        connectivity_matrix_path,
-        atlas_path,
-        grouping_name="Lobe",
-        label="Label",
-        roi_names="ROIname",
-        hemisphere="Hemi",
-        left_symbol="L",
-        right_symbol="R",
-        threshold=0.5,
+            self,
+            connectivity_matrix_path,
+            atlas_path,
+            grouping_name="Lobe",
+            label="Label",
+            roi_names="ROIname",
+            hemisphere="Hemi",
+            left_symbol="L",
+            right_symbol="R",
+            threshold=0.5,
     ) -> None:
         """
         Parameters
@@ -242,8 +242,10 @@ class Circular_graph:
                 sort_value += 1
             return sort_value
 
-        def add_values(g, items, sort_value):
+        def add_values(g, items, sort_value, rotate_nodes=False):
             for k1, v1 in items:
+                if rotate_nodes:
+                    v1.reverse()
                 for i1 in v1:
                     g.nodes()[i1[0]]["group"] = k1
                     g.nodes()[i1[0]]["transparent"] = 1
@@ -252,10 +254,10 @@ class Circular_graph:
                 sort_value = add_padding(g, 5, sort_value)
             return sort_value
 
-        g = nx.from_numpy_array(self.filtered_matrix, self.groups).to_directed()
+        g = nx.from_numpy_array(self.normalized_matrix, self.groups).to_directed()
         nx.set_edge_attributes(
             g,
-            {e: w * 3 for e, w in nx.get_edge_attributes(g, "weight").items()},
+            {e: w * 4 for e, w in nx.get_edge_attributes(g, "weight").items()},
             "doubled_weight",
         )
         left = self.groups[0]
@@ -272,6 +274,7 @@ class Circular_graph:
             g,
             collections.OrderedDict(sorted(right.items(), reverse=True)).items(),
             sort_value,
+            True
         )
 
         rotate_node_by_count(g, round(((len(g.nodes)) / 4) - padding_size / 3))
