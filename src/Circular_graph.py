@@ -264,7 +264,7 @@ class Circular_graph:
         right = self.groups[1]
         other = self.groups[2]
         sort_value = 0
-        padding_size = 30
+        padding_size = 9
         sort_value = add_padding(g, padding_size, sort_value)
         sort_value = add_values(
             g, collections.OrderedDict(sorted(left.items())).items(), sort_value
